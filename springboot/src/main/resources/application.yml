@@ -1,0 +1,22 @@
+spring:
+  jmx:
+    enabled: false
+  # 配置测试和线上文件
+  profiles:
+    active: dev
+
+
+
+# mybatis
+mybatis:
+    # mybatis的xml文件配置
+  type-aliases-package: cn.lcdiao.springboot.entity
+  mapper-locations: classpath:mapper/*.xml
+    # SQL控制台打印
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+
+
