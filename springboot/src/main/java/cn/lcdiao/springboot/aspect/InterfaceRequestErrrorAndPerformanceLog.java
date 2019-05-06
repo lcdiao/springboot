@@ -1,5 +1,6 @@
 package cn.lcdiao.springboot.aspect;
 
+import cn.lcdiao.springboot.annotation.MyToken;
 import cn.lcdiao.springboot.enums.ResultEnum;
 import cn.lcdiao.springboot.exception.DataCenterException;
 import cn.lcdiao.springboot.message.DefaultMessage;
@@ -16,12 +17,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.util.concurrent.TimeUnit;
 
@@ -41,11 +48,29 @@ public class InterfaceRequestErrrorAndPerformanceLog {
 
     @Around("pointCut()")
     public Message handleControllerMethod(ProceedingJoinPoint pjp) throws Throwable{
-
         Stopwatch stopwatch = Stopwatch.createStarted();
         Message result;
         try {
             logger.info("执行Controller开始:" + pjp.getSignature() + "参数:" + Lists.newArrayList(pjp.getArgs()).toString());
+
+
+
+            //处理注解
+//            MethodSignature signature = (MethodSignature) pjp.getSignature();
+//            Method method = pjp.getTarget().getClass().getMethod(signature.getName(),signature.getMethod().getParameterTypes());
+//            Annotation[] annotations = method.getAnnotations();
+//            for (Annotation a:annotations) {
+//                //自定义注解
+//                if (a instanceof MyToken) {
+//                    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//                    HttpServletRequest request = attributes.getRequest();
+//                    String token = request.getHeader("Authorization");
+//                }
+//            }
+
+
+
+
             //处理入参特殊字符和sql注入攻击
             //checkRequestParam(pjp);
             //执行访问接口操作
@@ -75,35 +100,35 @@ public class InterfaceRequestErrrorAndPerformanceLog {
         if (e instanceof DataCenterException) {
           logger.error("DataCenterException{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() +
                   ",\n异常: " + e.getMessage() + "}",e);
-          message = MessageBuilder.createMessage(ResultEnum.PARAM_ERROR.getCode(),ResultEnum.PARAM_ERROR.getMessage());
+          message = MessageBuilder.createMessage(ResultEnum.PARAM_ERROR);
 
         } else if (e instanceof JWTDecodeException || e instanceof SignatureVerificationException) {
             logger.error("token异常{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() + "\n异常： " + e.getMessage());
-            message = MessageBuilder.createMessage(ResultEnum.TOKEN_ERROR.getCode(),ResultEnum.TOKEN_ERROR.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.TOKEN_ERROR);
 
         } else if (e instanceof TokenExpiredException) {
             logger.error("token过期{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() + "\n异常： " + e.getMessage());
-            message = MessageBuilder.createMessage(ResultEnum.TOKEN_OVERDUE.getCode(),ResultEnum.TOKEN_OVERDUE.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.TOKEN_OVERDUE);
 
         } else if (e instanceof DataIntegrityViolationException) {
             logger.error("DataIntegrityViolationException{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() +
                     ",\n异常: " + e.getMessage() + "}",e);
-            message = MessageBuilder.createMessage(ResultEnum.PARAM_ERROR.getCode(),ResultEnum.PARAM_ERROR.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.PARAM_ERROR);
 
         } else if(e instanceof ConnectException) {
             logger.error("ConnectException{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() +
                     ",\n异常: " + e.getMessage() + "}",e);
-            message = MessageBuilder.createMessage(ResultEnum.OVERTIME.getCode(),ResultEnum.OVERTIME.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.OVERTIME);
 
         }else if (e instanceof RuntimeException) {
             logger.error("RuntimeException{方法: " + pjp.getSignature() + ",参数: " + pjp.getArgs() +
                     ",\n异常: " + e.getMessage() + "}",e);
-            message = MessageBuilder.createMessage(ResultEnum.ERROR.getCode(),ResultEnum.ERROR.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.ERROR);
 
         }  else {
             logger.error("Exception{方法：" + pjp.getSignature() + "， 参数：" + pjp.getArgs() +
                     ",\n异常：" + e.getMessage() + "}", e);
-            message = MessageBuilder.createMessage(ResultEnum.ERROR.getCode(),ResultEnum.ERROR.getMessage());
+            message = MessageBuilder.createMessage(ResultEnum.ERROR);
         }
         return message;
     }

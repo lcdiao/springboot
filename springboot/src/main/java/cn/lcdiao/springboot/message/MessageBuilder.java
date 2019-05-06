@@ -1,15 +1,18 @@
 package cn.lcdiao.springboot.message;
 
+import cn.lcdiao.springboot.enums.ResultEnum;
+
 /**
  * @Author: diao
  * @Description:
  * @Date: 2019/4/30 15:31
  */
 public class MessageBuilder {
-    public static Message createMessage(String code,String msg){
-        return new DefaultMessage(code,msg);
-    }
-    public static Message createMessage(String code,String msg,Object data){
-        return new DataMessage(code,msg,data);
+
+    public static Message createSuccessMessage(){return new DefaultMessage(ResultEnum.SUCCESS.getCode(),ResultEnum.SUCCESS.getMessage());};
+    public static <T> Message createSuccessMessage(T data){return new DataMessage(ResultEnum.SUCCESS.getCode(),ResultEnum.SUCCESS.getMessage(),data);};
+
+    public static Message createMessage(ResultEnum resultEnum){
+        return new DefaultMessage(resultEnum.getCode(),resultEnum.getMessage());
     }
 }

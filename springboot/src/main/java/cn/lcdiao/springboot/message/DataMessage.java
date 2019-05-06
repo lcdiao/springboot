@@ -9,19 +9,15 @@ public class DataMessage<T> implements Message {
     private String code;
     private String msg;
     private T data;
-    @Override
     public String getCode() {
         return code;
     }
-    @Override
     public void setCode(String code) {
         this.code = code;
     }
-    @Override
     public String getMsg() {
         return msg;
     }
-    @Override
     public void setMsg(String msg) {
         this.msg = msg;
     }
@@ -38,5 +34,14 @@ public class DataMessage<T> implements Message {
         this.code = code;
         this.msg = msg;
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "DataMessage{" +
+                "code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

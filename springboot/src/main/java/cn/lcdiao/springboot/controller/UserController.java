@@ -29,20 +29,20 @@ public class UserController {
     @ResponseBody
     public Message getUser(@RequestBody JSONObject jsonObject) {
         if (null == jsonObject) {
-            return MessageBuilder.createMessage(ResultEnum.PARAM_ERROR.getCode(),ResultEnum.PARAM_ERROR.getMessage());
+            return MessageBuilder.createMessage(ResultEnum.PARAM_ERROR);
         }
         Long id = jsonObject.getLong("id");
         User user = userService.getUser(id);
-        return MessageBuilder.createMessage(ResultEnum.SUCCESS.getCode(),ResultEnum.SUCCESS.getMessage(),user);
+        return MessageBuilder.createSuccessMessage(user);
     }
 
     @PostMapping("/insertUser")
     @ResponseBody
     public Message insertUser(@RequestBody User user) {
         if (null == user) {
-            return MessageBuilder.createMessage(ResultEnum.PARAM_ERROR.getCode(),ResultEnum.PARAM_ERROR.getMessage());
+            return MessageBuilder.createMessage(ResultEnum.PARAM_ERROR);
         }
         userService.insertUser(user);
-        return MessageBuilder.createMessage(ResultEnum.SUCCESS.getCode(),ResultEnum.SUCCESS.getMessage());
+        return MessageBuilder.createSuccessMessage();
     }
 }

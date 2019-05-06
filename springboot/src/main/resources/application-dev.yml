@@ -2,15 +2,18 @@ spring:
     # redis的配置
     redis:
       database: 0
-      host:
+      host: 134.175.116.100
       port: 6379
       jedis:
         pool:
           max-wait: -1ms
           max-idle: 8
           max-active: 8
-      timeout: 450ms
+      timeout: 1000ms
       #password: ****
+    #spring.cache.type 指定注解缓存使用redis
+    cache:
+      type: redis
   # mysql的配置
     datasource:
       url: jdbc:mysql://localhost:3306/springboot?serverTimezone=Asia/Shanghai&characterEncoding=utf-8

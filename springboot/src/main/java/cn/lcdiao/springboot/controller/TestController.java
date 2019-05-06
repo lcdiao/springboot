@@ -1,9 +1,11 @@
 package cn.lcdiao.springboot.controller;
 
+import cn.lcdiao.springboot.annotation.MyToken;
 import cn.lcdiao.springboot.enums.ResultEnum;
 import cn.lcdiao.springboot.message.Message;
 import cn.lcdiao.springboot.message.MessageBuilder;
 import cn.lcdiao.springboot.service.UserService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +34,15 @@ public class TestController {
         Map m = new HashMap();
         m.put("hello","world");
         m.put("date",new Date());
-        return MessageBuilder.createMessage(ResultEnum.SUCCESS.getCode(),ResultEnum.SUCCESS.getMessage(),m);
+        return MessageBuilder.createSuccessMessage(m);
+    }
+
+    @GetMapping("/testToken")
+    @ResponseBody
+    @MyToken
+    public Message testToken(@RequestHeader("Authorization") String token, @RequestBody JSONObject json) {
+        System.out.println(json);
+
+        return MessageBuilder.createSuccessMessage();
     }
 }

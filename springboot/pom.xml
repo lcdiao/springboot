@@ -38,6 +38,10 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <!-- 移除嵌入式tomcat插件 -->
@@ -73,11 +77,11 @@
             <version>2.0.0</version>
         </dependency>
         <!-- 热部署 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
 
 
         <dependency>

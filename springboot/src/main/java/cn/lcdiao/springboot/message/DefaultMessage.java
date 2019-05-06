@@ -8,19 +8,15 @@ package cn.lcdiao.springboot.message;
 public class DefaultMessage implements Message {
     private String code;
     private String msg;
-    @Override
     public String getCode() {
         return code;
     }
-    @Override
     public void setCode(String code) {
         this.code = code;
     }
-    @Override
     public String getMsg() {
         return msg;
     }
-    @Override
     public void setMsg(String msg) {
         this.msg = msg;
     }

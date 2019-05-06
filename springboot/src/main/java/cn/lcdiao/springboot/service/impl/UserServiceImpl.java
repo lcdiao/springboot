@@ -4,6 +4,8 @@ import cn.lcdiao.springboot.dao.UserMapper;
 import cn.lcdiao.springboot.entity.User;
 import cn.lcdiao.springboot.exception.DataCenterException;
 import cn.lcdiao.springboot.service.UserService;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @Cacheable(value = "testcache",key = "#id")
     public User getUser(Long id) {
         User user = userMapper.selectByPrimaryKey(id);
         //没数据就抛出异常，由aop处理并返回错误码到前端
